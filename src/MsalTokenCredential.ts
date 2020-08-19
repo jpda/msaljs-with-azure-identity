@@ -1,34 +1,27 @@
 import { TokenCredential, GetTokenOptions, AccessToken } from '@azure/identity';
-import { PublicClientApplication, AuthenticationResult } from '@azure/msal-browser';
+import { AuthenticationResult } from '@azure/msal-browser';
+import AuthService from './AuthService';
 
 export class MsalTokenCredential implements TokenCredential {
-    public tokenClient: PublicClientApplication;
+    public authService: AuthService;
 
-    constructor(msalObj: PublicClientApplication) {
-        this.tokenClient = msalObj;
+    constructor(authService: AuthService) {
+        this.authService = authService;
     }
 
     async getToken(_scopes: string | string[], _options?: GetTokenOptions): Promise<AccessToken | null> {
         var scopes = Array.isArray(_scopes) ? _scopes : _scopes.split(' ');
 
-        // if so, get a token
         var result: AuthenticationResult;
         try {
-            // from cache
-            result = await this.tokenClient.acquireTokenSilent({
-                // todo: get the correct account or error if > 1
-                account: this.tokenClient.getAllAccounts()[0],
-                scopes: scopes
-            });
+            result = await this.authService.acquireTokenForScope(scopes);
+            return {
+                token: result.accessToken,
+                expiresOnTimestamp: result.expiresOn.getTime()
+            };
         } catch (e) {
-            // todo: check exception error code for UI required
             console.error(e);
-            result = await this.tokenClient.acquireTokenPopup({ scopes: scopes });
         }
-
-        return {
-            token: result.accessToken,
-            expiresOnTimestamp: result.expiresOn.getTime()
-        };
+        return null;
     }
 }

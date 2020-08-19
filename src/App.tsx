@@ -1,16 +1,13 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import './App.css';
 import { BlobView } from './components/blobView';
 import { GraphView } from './components/GraphView';
-import { PublicClientApplication } from '@azure/msal-browser';
+import AuthService from './AuthService';
 
-interface State {
-  userLoggedIn: boolean;
-}
+interface State { }
 
 class App extends Component<any, State> {
-  msalObject: PublicClientApplication;
+  authService: AuthService;
 
   constructor(p: any, s: State) {
     super(p, s);
@@ -29,28 +26,22 @@ class App extends Component<any, State> {
         }
       }
     }
-    this.msalObject = new PublicClientApplication(msalConfig.config);
+    this.authService = new AuthService(msalConfig);
   }
 
   async componentWillMount() {
-    if (!this.msalObject.getAllAccounts() || this.msalObject.getAllAccounts().length <= 0) {
-      console.log("about to loginPopup");
-      await this.msalObject.loginPopup();
-      this.setState({ userLoggedIn: true });
-    } else {
-      this.setState({ userLoggedIn: true });
+    if (!this.authService.UserIsAuthenticated()) {
+      await this.authService.login();
     }
   }
 
   render() {
-    if (this.state.userLoggedIn !== null && this.state.userLoggedIn) {
-      return (
-        <div className="App">
-          <GraphView msalObj={this.msalObject} />
-          <BlobView msalObj={this.msalObject} />
-        </div>
-      );
-    }
+    return (
+      <div className="App">
+        <GraphView authService={this.authService} />
+        <BlobView authService={this.authService} />
+      </div>
+    );
   }
 }
 export default App;
