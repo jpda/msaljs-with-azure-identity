@@ -1,25 +1,25 @@
 {
   "files": {
-    "main.css": "/static/css/main.8b95a2ec.chunk.css",
-    "main.js": "/static/js/main.eb821659.chunk.js",
-    "main.js.map": "/static/js/main.eb821659.chunk.js.map",
-    "runtime-main.js": "/static/js/runtime-main.d8604398.js",
-    "runtime-main.js.map": "/static/js/runtime-main.d8604398.js.map",
-    "static/css/2.3cf5d70f.chunk.css": "/static/css/2.3cf5d70f.chunk.css",
-    "static/js/2.99b4c20e.chunk.js": "/static/js/2.99b4c20e.chunk.js",
-    "static/js/2.99b4c20e.chunk.js.map": "/static/js/2.99b4c20e.chunk.js.map",
-    "index.html": "/index.html",
-    "precache-manifest.301a300fcc9d4c3a4822f1a6a453f45e.js": "/precache-manifest.301a300fcc9d4c3a4822f1a6a453f45e.js",
-    "service-worker.js": "/service-worker.js",
-    "static/css/2.3cf5d70f.chunk.css.map": "/static/css/2.3cf5d70f.chunk.css.map",
-    "static/css/main.8b95a2ec.chunk.css.map": "/static/css/main.8b95a2ec.chunk.css.map",
-    "static/js/2.99b4c20e.chunk.js.LICENSE.txt": "/static/js/2.99b4c20e.chunk.js.LICENSE.txt"
+    "main.css": "https://jpda.dev/msaljs-with-azure-identity/static/css/main.8b95a2ec.chunk.css",
+    "main.js": "https://jpda.dev/msaljs-with-azure-identity/static/js/main.9091e85e.chunk.js",
+    "main.js.map": "https://jpda.dev/msaljs-with-azure-identity/static/js/main.9091e85e.chunk.js.map",
+    "runtime-main.js": "https://jpda.dev/msaljs-with-azure-identity/static/js/runtime-main.6c57fc91.js",
+    "runtime-main.js.map": "https://jpda.dev/msaljs-with-azure-identity/static/js/runtime-main.6c57fc91.js.map",
+    "static/css/2.3cf5d70f.chunk.css": "https://jpda.dev/msaljs-with-azure-identity/static/css/2.3cf5d70f.chunk.css",
+    "static/js/2.0b59ab0b.chunk.js": "https://jpda.dev/msaljs-with-azure-identity/static/js/2.0b59ab0b.chunk.js",
+    "static/js/2.0b59ab0b.chunk.js.map": "https://jpda.dev/msaljs-with-azure-identity/static/js/2.0b59ab0b.chunk.js.map",
+    "index.html": "https://jpda.dev/msaljs-with-azure-identity/index.html",
+    "precache-manifest.678065104d67a870b58f0df155ff92d0.js": "https://jpda.dev/msaljs-with-azure-identity/precache-manifest.678065104d67a870b58f0df155ff92d0.js",
+    "service-worker.js": "https://jpda.dev/msaljs-with-azure-identity/service-worker.js",
+    "static/css/2.3cf5d70f.chunk.css.map": "https://jpda.dev/msaljs-with-azure-identity/static/css/2.3cf5d70f.chunk.css.map",
+    "static/css/main.8b95a2ec.chunk.css.map": "https://jpda.dev/msaljs-with-azure-identity/static/css/main.8b95a2ec.chunk.css.map",
+    "static/js/2.0b59ab0b.chunk.js.LICENSE.txt": "https://jpda.dev/msaljs-with-azure-identity/static/js/2.0b59ab0b.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
-    "static/js/runtime-main.d8604398.js",
+    "static/js/runtime-main.6c57fc91.js",
     "static/css/2.3cf5d70f.chunk.css",
-    "static/js/2.99b4c20e.chunk.js",
+    "static/js/2.0b59ab0b.chunk.js",
     "static/css/main.8b95a2ec.chunk.css",
-    "static/js/main.eb821659.chunk.js"
+    "static/js/main.9091e85e.chunk.js"
   ]
 }
