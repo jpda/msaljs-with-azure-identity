@@ -1,55 +1,62 @@
 import React from 'react';
 import { BlobServiceClient, BlobItem } from "@azure/storage-blob";
-import { MsalTokenCredential } from '../MsalTokenCredential';
-import AuthService from '../AuthService';
 
 interface Props {
-    authService: AuthService;
+    fullSasUri: string;
 }
 interface State {
-    // a place to store our blob item metadata after we query them from the service
-    blobsWeFound: BlobItem[];
+    blobsWeFound: BlobViewItem[];
     containerUrl: string;
+    sasUri: string;
+}
+
+interface BlobViewItem {
+    blob: BlobItem;
+    url: string;
 }
 
 export class BlobView extends React.Component<Props, State> {
     state: State;
-    authService: AuthService;
 
     constructor(props: Props, state: State) {
-        //super(state);
         super(props, state);
-        this.authService = props.authService;
-        this.state = { blobsWeFound: [], containerUrl: "" }
+        this.state = { blobsWeFound: [], containerUrl: "", sasUri: props.fullSasUri }
     }
 
-    // here's our azure identity config
+    componentWillRecieveProps(nextProps: Props) {
+        this.setState({
+            sasUri: nextProps.fullSasUri
+        });
+    }
+
     async componentDidMount() {
-        var localBlobList = [];
-        const blobStorageClient = new BlobServiceClient(
-            // this is the blob endpoint of your storage acccount. Available from the portal 
-            // they follow this format: <accountname>.blob.core.windows.net for Azure global
-            // the endpoints may be slightly different from national clouds like US Gov or Azure China
-            "https://jpdamsaljsblob.blob.core.windows.net/",
-            new MsalTokenCredential(this.authService)
-        )
+        //await this.fetchBlobs(this.state.sasUri);
+        await this.fetchBlobs(this.state.sasUri);
+    }
 
-        // this uses our container we created earlier - I named mine "private"
-        var containerClient = blobStorageClient.getContainerClient("private");
+    async fetchBlobs(sasUri: string) {
+        if (!sasUri && sasUri === "") return;
+        var uri = new URL(sasUri);
+        var host = `${uri.protocol}//${uri.host}`;
+        var container = `${uri.pathname}`;
+        var sas = uri.search;
 
-        // now let's query our container for some blobs!
+        var containerName = container.split('/')[1];
+
+        var localBlobList: BlobViewItem[] = [];
+        const blobStorageClient = new BlobServiceClient(`${host}${sas}`);
+        var containerClient = blobStorageClient.getContainerClient(containerName);
         for await (const blob of containerClient.listBlobsFlat()) {
-            // and plunk them in a local array...
-            localBlobList.push(blob);
+            var bc = containerClient.getBlobClient(blob.name);
+            localBlobList.push({ blob: blob, url: bc.url } as BlobViewItem);
         }
-        //...that we push into our state
         this.setState({ blobsWeFound: localBlobList, containerUrl: containerClient.url });
     }
 
     render() {
         return (
             <div>
-                <table>
+                <table className="table">
                     <thead>
                         <tr>
                             <th>blob name</th>
@@ -60,11 +67,9 @@ export class BlobView extends React.Component<Props, State> {
                     <tbody>{
                         this.state.blobsWeFound.map((x, i) => {
                             return <tr key={i}>
-                                <td>{x.name}</td>
-                                <td>{x.properties.contentLength}</td>
-                                <td>
-                                    <img alt={x.name} src={this.state.containerUrl + x.name} />
-                                </td>
+                                <td>{x.blob.name}</td>
+                                <td>{x.blob.properties.contentLength}</td>
+                                <td><a href={x.url} download={x.blob.name}>Download</a></td>
                             </tr>
                         })
                     }

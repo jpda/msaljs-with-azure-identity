@@ -1,45 +1,64 @@
 import React, { Component } from 'react';
+import { Container, Row, Col, Form, Navbar } from 'react-bootstrap';
 import './App.css';
 import { BlobView } from './components/blobView';
-import { GraphView } from './components/GraphView';
-import AuthService from './AuthService';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
-interface State { }
+interface State {
+  userUri: string;
+}
 
 class App extends Component<any, State> {
-  authService: AuthService;
-
   constructor(p: any, s: State) {
     super(p, s);
-    this.setState({ userLoggedIn: false });
-
-    var msalConfig = {
-      config: {
-        auth: {
-          clientId: "01dd2ae0-4a39-43a6-b3e4-742d2bd41822",
-          authority: "https://login.microsoftonline.com/98a34a88-7940-40e8-af71-913452037f31",
-          redirectUri: "http://localhost:3000/"
-        },
-        cache: {
-          // session storage is more secure, but prevents single-sign-on from working. other option is 'localStorage'
-          cacheLocation: "sessionStorage"
-        }
-      }
-    }
-    this.authService = new AuthService(msalConfig);
+    this.state = { userUri: "" };
+    this.handleChange = this.handleChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  async componentWillMount() {
-    if (!this.authService.UserIsAuthenticated()) {
-      await this.authService.login();
-    }
+  handleChange(event: any) {
+    this.setState({ userUri: event.target.value });
+  }
+
+  handleSubmit(event: any) {
+    event.preventDefault();
   }
 
   render() {
     return (
       <div className="App">
-        <GraphView authService={this.authService} />
-        <BlobView authService={this.authService} />
+        <Row>
+          <Col>
+            <Navbar bg="dark" variant="dark" expand="lg">
+              <Container>
+                <Navbar.Brand href="#home">azure blob sas thing</Navbar.Brand>
+                <Navbar.Toggle aria-controls="basic-navbar-nav" />
+                <Navbar.Collapse id="basic-navbar-nav">
+                </Navbar.Collapse>
+              </Container>
+            </Navbar>
+          </Col>
+        </Row>
+        <Container>
+          <Row>
+            <Col>
+              <Form onSubmit={this.handleSubmit}>
+                <Form.Group controlId="formFullSasUri">
+                  <Form.Label>Enter the SAS of your container here</Form.Label>
+                  <Form.Control size="lg" type="url" value={this.state.userUri} onChange={this.handleChange} placeholder="https://<storage>.blob.core.windows.net/<container>/<sas>" />
+                  <Form.Text className="text-muted">
+                    This is an azure storage sas with list permissions on a container
+                  </Form.Text>
+                </Form.Group>
+              </Form>
+            </Col>
+          </Row>
+          <Row>
+            <Col>
+              <BlobView key={this.state.userUri} fullSasUri={this.state.userUri} />
+            </Col>
+          </Row>
+        </Container>
       </div>
     );
   }
